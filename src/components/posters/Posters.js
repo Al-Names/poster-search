@@ -22,7 +22,6 @@ export default class Posters extends Component {
         console.log(res.data.collection);
         this.setState({
           posters: res.data.posters,
-          event: res.data.events[0].name,
           total: res.data.collection.total
         });
       })
@@ -54,7 +53,7 @@ export default class Posters extends Component {
         {
           offset: (this.state.offset += 6)
         },
-        console.log(this.state.offset),
+
         this.fetchPosters(this.state.query)
       );
     }
@@ -65,7 +64,7 @@ export default class Posters extends Component {
         {
           offset: (this.state.offset -= 6)
         },
-        console.log(this.state.offset),
+
         this.fetchPosters(this.state.query)
       );
     }
