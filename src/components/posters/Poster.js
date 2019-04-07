@@ -16,7 +16,6 @@ export default class Poster extends Component {
         `http://cors-anywhere.herokuapp.com/https://staging-ng.morressier.com/events_manager/v2/posters/${posterId}`
       )
       .then(res => {
-        console.log(res.data);
         this.setState({
           poster: res.data.poster,
           event: res.data.event,
@@ -27,9 +26,6 @@ export default class Poster extends Component {
   }
 
   render() {
-    console.log(this.state.poster.title);
-    console.log(this.state.users);
-    // console.log(this.state.poster.event);
     const { title, thumb_url_large, paper_abstract } = this.state.poster;
     const { name, location, short_name } = this.state.event;
 

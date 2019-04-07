@@ -13,19 +13,21 @@ import PageNotFound from "./components/pages/PageNotFound";
 class App extends Component {
   render() {
     return (
-      <Router>
-        <Fragment>
-          <Header />
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={Index} />
-              <Route exact path="/search/:query" component={Posters} />
-              <Route exact path="/poster/:posterId" component={Poster} />
-              <Route component={PageNotFound} />
-            </Switch>
-          </div>
-        </Fragment>
-      </Router>
+      <Provider>
+        <Router>
+          <Fragment>
+            <Header />
+            <div className="container">
+              <Switch>
+                <Route exact path="/" component={Index} />
+                <Route exact path="/search/:query" component={Posters} />
+                <Route exact path="/poster/:posterId" component={Poster} />
+                <Route component={PageNotFound} />
+              </Switch>
+            </div>
+          </Fragment>
+        </Router>
+      </Provider>
     );
   }
 }
