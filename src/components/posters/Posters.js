@@ -6,38 +6,70 @@ export default class Posters extends Component {
     super(props);
     this.state = {
       posters: [],
-      event: []
+      event: [],
+      offset: 0,
+      limit: 6,
+      total: null
     };
   }
-  componentDidMount() {
-    const query = this.props.match.params.query;
+  fetchPosters(search) {
+    const { limit, offset } = this.state;
     axios
       .get(
-        `http://cors-anywhere.herokuapp.com/https://staging-ng.morressier.com/events_manager/v3/posters/search?query=${query}`
+        `http://cors-anywhere.herokuapp.com/https://staging-ng.morressier.com/events_manager/v3/posters/search?query=${search}&limit=${limit}&offset=${offset}`
       )
       .then(res => {
+        console.log(res.data.collection);
         this.setState({
           posters: res.data.posters,
-          event: res.data.events[0].name
+          event: res.data.events[0].name,
+          total: res.data.collection.total
         });
       })
       .catch(err => console.log(err));
   }
+  componentDidMount() {
+    const query = this.props.match.params.query;
+    this.fetchPosters(query);
+  }
   componentDidUpdate(prevProps, prevState) {
     const query = this.props.match.params.query;
     if (prevProps.match.params.query !== this.props.match.params.query) {
-      axios
-        .get(
-          `http://cors-anywhere.herokuapp.com/https://staging-ng.morressier.com/events_manager/v3/posters/search?query=${query}`
-        )
-        .then(res => {
-          this.setState({
-            posters: res.data.posters
-          });
-        })
-        .catch(err => console.log(err));
+      this.setState({
+        offset: 0
+      });
+      this.fetchPosters(query);
+    }
+    if (prevState.offset !== this.state.offset) {
+      this.setState({
+        offset: prevState.offset
+      });
+      this.fetchPosters(query);
     }
   }
+
+  nextPage = () => {
+    if (this.state.offset < this.state.total) {
+      this.setState(
+        {
+          offset: (this.state.offset += 6)
+        },
+        console.log(this.state.offset),
+        this.fetchPosters(this.state.query)
+      );
+    }
+  };
+  previousPage = () => {
+    if (this.state.offset !== 0) {
+      this.setState(
+        {
+          offset: (this.state.offset -= 6)
+        },
+        console.log(this.state.offset),
+        this.fetchPosters(this.state.query)
+      );
+    }
+  };
 
   render() {
     const query = this.props.match.params.query;
@@ -75,6 +107,20 @@ export default class Posters extends Component {
               </Link>
             </div>
           ))}
+        </div>
+        <div className="buttonBag">
+          <button
+            onClick={this.previousPage}
+            className="btn btn-primary previousButton"
+          >
+            Previous Page
+          </button>
+          <button
+            onClick={this.nextPage}
+            className="btn btn-primary nextButton"
+          >
+            Next Page
+          </button>
         </div>
       </div>
     );

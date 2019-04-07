@@ -19,3 +19,15 @@
     float: right;
     margin: 0 auto
 }
+
+.buttonBag {
+    margin: 0 auto;
+}
+
+.previousButton {
+    float: left;
+}
+
+.nextButton {
+    float: right;
+}
